@@ -34,6 +34,10 @@
 #include "Spells/Spell.h"
 #include "Guilds/GuildMgr.h"
 #include "Chat/Chat.h"
+#include "Entities/Item.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/LuaEngine.h"
+#endif
 
 enum StableResultCode
 {
@@ -341,6 +345,11 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket& recv_data)
     if (pCreature->isSpiritGuide())
         pCreature->SendAreaSpiritHealerQueryOpcode(_player);
 
+#ifdef BUILD_ELUNA
+    if (Eluna* e = _player->GetEluna())
+        if (!e->OnGossipHello(_player, pCreature))
+#endif
+
     if (!sScriptDevAIMgr.OnGossipHello(_player, pCreature))
     {
         _player->PrepareGossipMenu(pCreature, pCreature->GetDefaultGossipMenuId());
@@ -393,6 +402,33 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
         if (!sScriptDevAIMgr.OnGossipSelect(_player, pGo, sender, action, code.empty() ? nullptr : code.c_str()))
             _player->OnGossipSelect(pGo, gossipListId);
     }
+#ifdef BUILD_ELUNA
+    else if (guid.IsItem())
+    {
+        Item* item = GetPlayer()->GetItemByGuid(guid);
+        if (!item)
+        {
+            DEBUG_LOG("WORLD: HandleGossipSelectOptionOpcode - %s not found or you can't interact with it.", guid.GetString().c_str());
+            return;
+        }
+
+        // used by eluna
+        if (Eluna* e = GetPlayer()->GetEluna())
+            e->HandleGossipSelectOption(GetPlayer(), item, GetPlayer()->GetPlayerMenu()->GossipOptionSender(gossipListId), GetPlayer()->GetPlayerMenu()->GossipOptionAction(gossipListId), code);
+    }
+    else if (guid.IsPlayer())
+    {
+        if (GetPlayer()->GetGUIDLow() != guid)
+        {
+            DEBUG_LOG("WORLD: HandleGossipSelectOptionOpcode - %s not found or you can't interact with it.", guid.GetString().c_str());
+            return;
+        }
+
+        // used by eluna
+        if (Eluna* e = GetPlayer()->GetEluna())
+            e->HandleGossipSelectOption(GetPlayer(), GetPlayer()->GetPlayerMenu()->GetGossipMenu().GetMenuId(), GetPlayer()->GetPlayerMenu()->GossipOptionSender(gossipListId), GetPlayer()->GetPlayerMenu()->GossipOptionAction(gossipListId), code);
+    }
+#endif
 }
 
 void WorldSession::HandleSpiritHealerActivateOpcode(WorldPacket& recv_data)

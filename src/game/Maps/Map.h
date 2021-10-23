@@ -40,6 +40,10 @@
 #include "Maps/MapDataContainer.h"
 #include "Util/UniqueTrackablePtr.h"
 #include "World/WorldStateVariableManager.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/LuaValue.h"
+#include "LuaEngine/ElunaMgr.h"
+#endif
 
 #include <bitset>
 #include <functional>
@@ -47,6 +51,9 @@
 
 struct CreatureInfo;
 class Creature;
+#ifdef BUILD_ELUNA
+class Eluna;
+#endif
 class Unit;
 class WorldPacket;
 class InstanceData;
@@ -386,6 +393,11 @@ class Map : public GridRefManager<NGridType>
         bool HasActiveZone(uint32 zoneId) { return find(m_activeZones.begin(), m_activeZones.end(), zoneId) != m_activeZones.end(); }
 #endif
 
+#ifdef BUILD_ELUNA
+        Eluna* GetEluna() const {return sElunaMgr -> Get(_elunaInfo); }
+        LuaVal lua_data = LuaVal({});
+#endif
+
     private:
         void LoadMapAndVMap(int gx, int gy);
 
@@ -518,6 +530,10 @@ class Map : public GridRefManager<NGridType>
         std::vector<uint32> m_activeZones;
         uint32 m_activeZonesTimer;
         bool hasRealPlayers;
+#endif
+
+#ifdef BUILD_ELUNA
+        ElunaInfo _elunaInfo;
 #endif
 };
 
