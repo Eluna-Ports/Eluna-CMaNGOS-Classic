@@ -32,6 +32,9 @@
 #include "Server/WorldPacket.h"
 #include "Tools/Language.h"
 #include "GameEvents/GameEventMgr.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/LuaEngine.h"
+#endif
 
 #include "Policies/Singleton.h"
 

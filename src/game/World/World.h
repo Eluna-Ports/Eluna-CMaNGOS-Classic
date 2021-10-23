@@ -32,6 +32,9 @@
 #include "Globals/GraveyardManager.h"
 #include "LFG/LFGQueue.h"
 #include "BattleGround/BattleGroundQueue.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/ElunaMgr.h"
+#endif
 
 #include <set>
 #include <list>
@@ -42,6 +45,9 @@
 #include <vector>
 #include <array>
 
+#ifdef BUILD_ELUNA
+class Eluna;
+#endif
 class Object;
 class ObjectGuid;
 class WorldPacket;
@@ -137,6 +143,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST,
     CONFIG_UINT32_START_GM_LEVEL,
     CONFIG_UINT32_GM_INVISIBLE_AURA,
+    CONFIG_UINT32_GROUP_VISIBILITY,
     CONFIG_UINT32_MAIL_DELIVERY_DELAY,
     CONFIG_UINT32_MASS_MAILER_SEND_PER_TICK,
     CONFIG_UINT32_UPTIME_UPDATE,
@@ -281,6 +288,7 @@ enum eConfigFloatValues
     CONFIG_FLOAT_CREATURE_FAMILY_ASSISTANCE_RADIUS,
     CONFIG_FLOAT_CREATURE_CHECK_FOR_HELP_RADIUS,
     CONFIG_FLOAT_GROUP_XP_DISTANCE,
+    CONFIG_FLOAT_THREAT_RADIUS,
     CONFIG_FLOAT_GHOST_RUN_SPEED_WORLD,
     CONFIG_FLOAT_GHOST_RUN_SPEED_BG,
     CONFIG_FLOAT_LEASH_RADIUS,
@@ -605,6 +613,10 @@ class World
         BattleGroundQueue& GetBGQueue() { return m_bgQueue; }
         void StartLFGQueueThread();
         void StartBGQueueThread();
+
+#ifdef BUILD_ELUNA
+        Eluna* GetEluna() const { return sElunaMgr->Get(_elunaInfo); }
+#endif
     protected:
         void _UpdateGameTime();
         // callback for UpdateRealmCharacters
@@ -729,6 +741,10 @@ class World
         std::thread m_lfgQueueThread;
         BattleGroundQueue m_bgQueue;
         std::thread m_bgQueueThread;
+
+#ifdef BUILD_ELUNA
+        ElunaInfo _elunaInfo;
+#endif
 };
 
 extern uint32 realmID;

@@ -34,6 +34,9 @@
 #include "Server/DBCStores.h"
 #include "Util/CommonDefines.h"
 #include "Anticheat/Anticheat.hpp"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/LuaEngine.h"
+#endif
 
 #include <chrono>
 #include <functional>
@@ -230,7 +233,12 @@ bool WorldSocket::ProcessIncomingData()
                             self->Close();
                             return;
                         }
-
+#ifdef BUILD_ELUNA
+                        if (!sWorld.GetEluna()->OnPacketReceive(self->m_session, *pct))
+                        {
+                            return;
+                        }
+#endif
                         if (!self->HandleAuthSession(*pct))
                         {
                             self->Close();
