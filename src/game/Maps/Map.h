@@ -39,6 +39,9 @@
 #include "Maps/SpawnManager.h"
 #include "Maps/MapDataContainer.h"
 #include "World/WorldStateVariableManager.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/LuaValue.h"
+#endif
 
 #include <bitset>
 #include <functional>
@@ -46,6 +49,9 @@
 
 struct CreatureInfo;
 class Creature;
+#ifdef BUILD_ELUNA
+class Eluna;
+#endif
 class Unit;
 class WorldPacket;
 class InstanceData;
@@ -379,6 +385,12 @@ class Map : public GridRefManager<NGridType>
         bool HasActiveZone(uint32 zoneId) { return find(m_activeZones.begin(), m_activeZones.end(), zoneId) != m_activeZones.end(); }
 #endif
 
+#ifdef BUILD_ELUNA
+        Eluna* GetEluna() const;
+
+        LuaVal lua_data = LuaVal({});
+#endif
+
 #ifdef BUILD_SOLOCRAFT
         bool SoloCraftDebuffEnable = 1;
         float SoloCraftSpellMult = 1.0;
@@ -531,6 +543,10 @@ class Map : public GridRefManager<NGridType>
         std::vector<uint32> m_activeZones;
         uint32 m_activeZonesTimer;
         bool hasRealPlayers;
+#endif
+
+#ifdef BUILD_ELUNA
+        Eluna* eluna;
 #endif
 };
 
