@@ -34,6 +34,9 @@
 #include "Grids/Cell.h"
 #include "Util/UniqueTrackablePtr.h"
 #include "Utilities/EventProcessor.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/LuaValue.h"
+#endif
 
 #include <set>
 
@@ -113,6 +116,7 @@ struct SpellEntry;
 class GenericTransport;
 #ifdef BUILD_ELUNA
 class ElunaEventProcessor;
+class Eluna;
 #endif
 
 typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
@@ -895,11 +899,10 @@ class WorldObject : public Object
     public:
 #ifdef BUILD_ELUNA
         virtual ~WorldObject();
-        virtual void Update(uint32 update_diff);
 #else
         virtual ~WorldObject() {}
-        virtual void Update(const uint32 /*diff*/);
 #endif
+        virtual void Update(const uint32 diff);
         virtual void Heartbeat() {}
         virtual uint32 GetHeartbeatDuration() const { return 5000; }
 
@@ -1200,6 +1203,10 @@ class WorldObject : public Object
         virtual Player* GetSpellModOwner() const { return nullptr; }
 #ifdef BUILD_ELUNA
         ElunaEventProcessor* elunaEvents;
+
+        Eluna* GetEluna() const;
+
+        LuaVal lua_data = LuaVal({});
 #endif
 
         void AddStringId(std::string& stringId);
