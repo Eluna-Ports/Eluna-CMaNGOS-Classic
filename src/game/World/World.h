@@ -41,6 +41,9 @@
 #include <vector>
 #include <array>
 
+#ifdef BUILD_ELUNA
+class Eluna;
+#endif
 class Object;
 class ObjectGuid;
 class WorldPacket;
@@ -417,6 +420,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_MMAP_ENABLED,
 #ifdef BUILD_ELUNA
     CONFIG_BOOL_ELUNA_ENABLED,
+    CONFIG_BOOL_ELUNA_COMPATIBILITY,
 #endif
 #ifdef BUILD_SOLOCRAFT
     CONFIG_BOOL_SOLOCRAFT_ENABLED,
@@ -713,6 +717,11 @@ class World
 
         LFGQueue& GetLFGQueue() { return m_lfgQueue; }
         void StartLFGQueueThread();
+
+#ifdef BUILD_ELUNA
+        Eluna* GetEluna() const { return eluna; }
+        Eluna* eluna;
+#endif
     protected:
         void _UpdateGameTime();
         // callback for UpdateRealmCharacters
