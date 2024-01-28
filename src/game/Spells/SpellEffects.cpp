@@ -4311,7 +4311,8 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
 
 #ifdef BUILD_ELUNA
     // used by eluna
-    sEluna->OnDuelRequest(target, caster);
+    if (Eluna* e = caster->GetEluna())
+        e->OnDuelRequest(target, caster);
 #endif
 }
 
