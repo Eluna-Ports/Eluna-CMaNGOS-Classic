@@ -10495,6 +10495,11 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
         pItem->SetGuidValue(ITEM_FIELD_CONTAINED, ObjectGuid());
         pItem->SetSlot(NULL_SLOT);
         pItem->SetState(ITEM_REMOVED, this);
+
+#ifdef BUILD_ELUNA
+        if (Eluna* e = GetEluna())
+            e->OnRemove(this, pItem);
+#endif
     }
 }
 
