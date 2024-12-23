@@ -34,8 +34,8 @@ jobs:
 
       - name: Configure
         env:
-          BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
-        run: cmake -DBUILD_ELUNA=ON -B ${{env.BUILD_DIR}} -S ${{env.REPO_DIR}} -DBoost_ARCHITECTURE=-x64
+          BOOST_ROOT: /opt/homebrew/opt/boost@1.85
+        run: cmake -DBUILD_ELUNA=ON -B ${{env.BUILD_DIR}} -S ${{env.REPO_DIR}} -DBoost_ARCHITECTURE=-arm64
 
       - name: Build
         env:
