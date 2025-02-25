@@ -554,7 +554,7 @@ class Map : public GridRefManager<NGridType>
 #endif
 
 #ifdef BUILD_ELUNA
-        Eluna* eluna;
+        std::unique_ptr<Eluna> eluna;
 #endif
 };
 
