@@ -183,7 +183,7 @@ Map::Map(uint32 id, time_t expiry, uint32 InstanceId)
     // lua state begins uninitialized
     eluna = nullptr;
 
-    if (sElunaConfig->IsElunaEnabled() && !sElunaConfig->IsElunaCompatibilityMode() && sElunaConfig->ShouldMapLoadEluna(id))
+    if (sElunaConfig->IsElunaEnabled() && sElunaConfig->ShouldMapLoadEluna(id))
         eluna = std::make_unique<Eluna>(this);
 #endif
 }
@@ -1139,10 +1139,8 @@ void Map::Update(const uint32& t_diff)
 #ifdef BUILD_ELUNA
     if (Eluna* e = GetEluna())
     {
-        if (!sElunaConfig->IsElunaCompatibilityMode())
-            e->UpdateEluna(t_diff);
-
-        e->OnUpdate(this, t_diff);
+        e->UpdateEluna(t_diff);
+        e->OnMapUpdate(this, t_diff);
     }
 #endif
 
@@ -3161,16 +3159,6 @@ void Map::RemoveFromSpawnCount(const ObjectGuid& guid)
 {
     m_spawnedCount[guid.GetEntry()].erase(guid);
 }
-
-#ifdef BUILD_ELUNA
-Eluna* Map::GetEluna() const
-{
-    if (sElunaConfig->IsElunaCompatibilityMode())
-        return sWorld.GetEluna();
-
-    return eluna.get();
-}
-#endif
 
 #ifdef BUILD_SOLOCRAFT
 //Set the instance difficulty

@@ -1422,7 +1422,7 @@ void World::SetInitialWorldSettings()
         ///- Run eluna scripts.
         sLog.outString("Starting Eluna world state...");
         // use map id -1 for the global Eluna state
-        eluna = std::make_unique<Eluna>(nullptr, sElunaConfig->IsElunaCompatibilityMode());
+        eluna = std::make_unique<Eluna>(nullptr);
         sLog.outString();
     }
 #endif
