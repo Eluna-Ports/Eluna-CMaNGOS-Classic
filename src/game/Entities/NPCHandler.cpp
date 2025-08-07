@@ -426,7 +426,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
 
         // used by eluna
         if (Eluna* e = GetPlayer()->GetEluna())
-            e->HandleGossipSelectOption(GetPlayer(), nullptr, GetPlayer()->GetPlayerMenu()->GossipOptionSender(gossipListId), GetPlayer()->GetPlayerMenu()->GossipOptionAction(gossipListId), code);
+            e->HandleGossipSelectOption(GetPlayer(), GetPlayer()->GetPlayerMenu()->GetGossipMenu().GetMenuId(), GetPlayer()->GetPlayerMenu()->GossipOptionSender(gossipListId), GetPlayer()->GetPlayerMenu()->GossipOptionAction(gossipListId), code);
     }
 #endif
 }
