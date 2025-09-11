@@ -1414,15 +1414,13 @@ void World::SetInitialWorldSettings()
     sTicketMgr.LoadGMTickets();
 
 #ifdef BUILD_ELUNA
-    // lua state begins uninitialized
-    eluna = nullptr;
-
     if (sElunaConfig->IsElunaEnabled())
     {
         ///- Run eluna scripts.
         sLog.outString("Starting Eluna world state...");
         // use map id -1 for the global Eluna state
-        eluna = std::make_unique<Eluna>(nullptr);
+        _elunaInfo = {ElunaInfoKey::MakeGlobalKey(0)};
+        sElunaMgr->Create(nullptr, _elunaInfo);
         sLog.outString();
     }
 #endif
