@@ -32,6 +32,9 @@
 #include "Globals/GraveyardManager.h"
 #include "LFG/LFGQueue.h"
 #include "BattleGround/BattleGroundQueue.h"
+#ifdef BUILD_ELUNA
+#include "LuaEngine/ElunaMgr.h"
+#endif
 
 #include <set>
 #include <list>
@@ -689,8 +692,7 @@ class World
         void StartBGQueueThread();
 
 #ifdef BUILD_ELUNA
-        Eluna* GetEluna() const { return eluna.get(); }
-        std::unique_ptr<Eluna> eluna;
+        Eluna* GetEluna() const { return sElunaMgr->Get(_elunaInfo); }
 #endif
     protected:
         void _UpdateGameTime();
@@ -816,6 +818,10 @@ class World
         std::thread m_lfgQueueThread;
         BattleGroundQueue m_bgQueue;
         std::thread m_bgQueueThread;
+
+#ifdef BUILD_ELUNA
+        ElunaInfo _elunaInfo;
+#endif
 };
 
 extern uint32 realmID;
