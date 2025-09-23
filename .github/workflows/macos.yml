@@ -28,13 +28,12 @@ jobs:
         run: |
           brew install mysql-client@8.4
           brew install openssl
-          brew install boost@1.85
-          brew link boost@1.85
+          brew install boost
           echo "OPENSSL_ROOT_DIR=$(brew --prefix --installed openssl)" >> $GITHUB_ENV
 
       - name: Configure
         env:
-          BOOST_ROOT: /opt/homebrew/opt/boost@1.85
+          BOOST_ROOT: /opt/homebrew/opt/boost
         run: cmake -DBUILD_ELUNA=ON -B ${{env.BUILD_DIR}} -S ${{env.REPO_DIR}} -DBoost_ARCHITECTURE=-arm64
 
       - name: Build
