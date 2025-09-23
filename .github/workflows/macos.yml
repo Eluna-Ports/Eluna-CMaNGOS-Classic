@@ -28,6 +28,7 @@ jobs:
         run: |
           brew install mysql-client@8.4
           brew install openssl
+          brew install boost
           echo "OPENSSL_ROOT_DIR=$(brew --prefix --installed openssl)" >> $GITHUB_ENV
 
       - name: Configure
