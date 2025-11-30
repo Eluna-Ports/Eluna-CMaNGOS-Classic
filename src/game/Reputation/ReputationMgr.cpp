@@ -270,7 +270,7 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
 {
 #ifdef BUILD_ELUNA
     // used by eluna
-    if (Eluna* e = m_player->GetEluna())
+    if (Eluna* e = m_player->GetEluna(); e && factionEntry)
         e->OnReputationChange(m_player, factionEntry->ID, standing, incremental);
 #endif
     if (!factionEntry)
