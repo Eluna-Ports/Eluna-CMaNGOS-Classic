@@ -181,7 +181,6 @@ Map::Map(uint32 id, time_t expiry, uint32 InstanceId)
     m_weatherSystem = new WeatherSystem(this);
 #ifdef BUILD_ELUNA
     if (sElunaConfig->IsElunaEnabled() && sElunaConfig->ShouldMapLoadEluna(id))
-        if (!Instanceable())
         {
             _elunaInfo = {ElunaInfoKey::MakeKey(GetId(), GetInstanceId())};
             sElunaMgr->Create(this, _elunaInfo);
