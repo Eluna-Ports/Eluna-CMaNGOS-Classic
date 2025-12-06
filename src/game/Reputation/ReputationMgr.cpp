@@ -268,13 +268,14 @@ void ReputationMgr::Initialize()
 
 bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standing, bool incremental, bool noSpillover)
 {
+    if (!factionEntry)
+        return false;
+
 #ifdef BUILD_ELUNA
     // used by eluna
     if (Eluna* e = m_player->GetEluna())
         e->OnReputationChange(m_player, factionEntry->ID, standing, incremental);
 #endif
-    if (!factionEntry)
-        return false;
 
     bool res = false;
     if (!noSpillover)
